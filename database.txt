@@ -1,0 +1,161 @@
+1. users Table
+
+This table stores all users:
+
+Donors
+NGOs/Recipients
+Admins
+Fields
+Field Name	Type	Description
+id	INT PK AUTO_INCREMENT	User ID
+full_name	VARCHAR(100)	Name
+email	VARCHAR(100) UNIQUE	Login email
+password	VARCHAR(255)	Hashed password
+phone	VARCHAR(20)	Contact
+role	ENUM('donor','recipient','admin')	User role
+organization_name	VARCHAR(150)	NGO/Restaurant name
+address	TEXT	Address
+city	VARCHAR(100)	City
+latitude	DECIMAL(10,8)	GPS location
+longitude	DECIMAL(11,8)	GPS location
+verification_status	ENUM('pending','approved','rejected')	Admin approval
+created_at	TIMESTAMP	Account creation
+2. food_categories Table
+
+Admin can manage categories.
+
+Fields
+Field Name	Type
+id	INT PK
+category_name	VARCHAR(50)
+Example Data
+Veg
+Non-Veg
+Bakery
+Drinks
+Fruits
+3. donations Table
+
+Main table for food listings.
+
+Your requirements mention:
+
+item names
+quantity
+expiry time
+photos
+best before timestamps
+Fields
+Field Name	Type
+id	INT PK
+donor_id	INT FK(users.id)
+title	VARCHAR(150)
+description	TEXT
+category_id	INT FK(food_categories.id)
+food_type	ENUM('Veg','Non-Veg')
+quantity	VARCHAR(50)
+expiry_time	DATETIME
+pickup_address	TEXT
+city	VARCHAR(100)
+latitude	DECIMAL(10,8)
+longitude	DECIMAL(11,8)
+image_url	VARCHAR(255)
+status	ENUM('available','claimed','picked_up','delivered','expired')
+created_at	TIMESTAMP
+4. claims Table
+
+Tracks which NGO claimed which food.
+
+This is required because your project includes a claiming system.
+
+Fields
+Field Name	Type
+id	INT PK
+donation_id	INT FK(donations.id)
+recipient_id	INT FK(users.id)
+claim_time	DATETIME
+status	ENUM('pending','approved','picked_up','delivered','cancelled')
+pickup_time	DATETIME
+delivery_time	DATETIME
+5. feedback Table
+
+Recipients can rate food quality and hygiene.
+
+Fields
+Field Name	Type
+id	INT PK
+donation_id	INT FK(donations.id)
+recipient_id	INT FK(users.id)
+donor_id	INT FK(users.id)
+rating	INT
+hygiene_rating	INT
+comment	TEXT
+created_at	TIMESTAMP
+6. notifications Table
+
+Stores alerts sent to NGOs.
+
+Your requirements mention real-time alerts and notifications.
+
+Fields
+Field Name	Type
+id	INT PK
+user_id	INT FK(users.id)
+title	VARCHAR(150)
+message	TEXT
+is_read	BOOLEAN
+created_at	TIMESTAMP
+7. verification_documents Table
+
+For NGO verification documents.
+
+Fields
+Field Name	Type
+id	INT PK
+user_id	INT FK(users.id)
+document_name	VARCHAR(255)
+document_url	VARCHAR(255)
+uploaded_at	TIMESTAMP
+8. donation_images Table (Optional but Better)
+
+If one donation can have multiple images.
+
+Fields
+Field Name	Type
+id	INT PK
+donation_id	INT FK(donations.id)
+image_url	VARCHAR(255)
+Relationships Between Tables
+users
+ ├── donations
+ ├── claims
+ ├── feedback
+ ├── notifications
+ └── verification_documents
+
+donations
+ ├── claims
+ ├── feedback
+ └── donation_images
+What Data Will Be Saved?
+Donor Data
+Name
+Restaurant/Hotel name
+Location
+Food listings
+Donation history
+Recipient Data
+NGO details
+Verification documents
+Claimed food history
+Donation Data
+Food name
+Quantity
+Expiry time
+GPS location
+Status
+System Data
+Notifications
+Ratings
+Reports
+Analytics
